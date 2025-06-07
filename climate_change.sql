@@ -11,7 +11,7 @@ SELECT state,
        AVG(tempf) over(
           PARTITION BY state
           ORDER BY YEAR
-       ) AS running_avg_temp --reurns averate tempf per state.
+       ) AS running_avg_temp --returns average tempf per state.
 FROM state_climate;
 --3
 SELECT state,
