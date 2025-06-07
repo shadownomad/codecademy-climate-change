@@ -8,7 +8,7 @@ FROM state_climate;
 
 ```
 
-First 10 results:
+First 10 Results:
 | state   | year | tempf       | tempc       |
 |---------|------|-------------|-------------|
 | Alabama | 1895 | 61.64166667 | 16.46759259 |
@@ -42,7 +42,7 @@ FROM state_climate;
 
 ```
 
-First 10 results:
+First 10 Results:
 | state   | year | tempf       | running_avg_temp |
 |---------|------|-------------|------------------|
 | Alabama | 1895 | 61.64166667 | 61.64166667      |
@@ -71,6 +71,7 @@ SELECT state,
        ) AS lowest_temp --returns lowest temp per state
 FROM state_climate;
 ```
+First 10 Results:
 | state   | year | tempf       | lowest_temp |
 |---------|------|-------------|-------------|
 | Alabama | 1976 | 60.675      | 60.675      |
@@ -85,4 +86,38 @@ FROM state_climate;
 | Alabama | 1895 | 61.64166667 | 60.675      |
 
 >Are the lowest recorded temps for each state more recent or more historic?
+
+The lowest temps are consistently more historic
+
+
+>Like before, write a query that returns state, year, tempf or tempc, except now we will also return the highest temperature (highest_temp) for each state.
+
+```SQL
+ELECT state,
+       year,
+       tempf,
+       LAST_VALUE(tempf) OVER(
+          PARTITION BY state
+          ORDER BY tempf
+          RANGE BETWEEN UNBOUNDED PRECEDING AND 
+      UNBOUNDED FOLLOWING -- avoids returning just the entry of current column
+       ) AS highest_temp -- returns highjest temp per state
+FROM state_climate;
+```
+First 10 results:
+| state   | year | tempf       | highest_temp |
+|---------|------|-------------|--------------|
+| Alabama | 1976 | 60.675      | 65.70833333  |
+| Alabama | 1968 | 61.0        | 65.70833333  |
+| Alabama | 1940 | 61.175      | 65.70833333  |
+| Alabama | 1983 | 61.19166667 | 65.70833333  |
+| Alabama | 1958 | 61.21666667 | 65.70833333  |
+| Alabama | 1979 | 61.35833333 | 65.70833333  |
+| Alabama | 1969 | 61.36666667 | 65.70833333  |
+| Alabama | 1901 | 61.39166667 | 65.70833333  |
+| Alabama | 1960 | 61.54166667 | 65.70833333  |
+| Alabama | 1895 | 61.64166667 | 65.70833333  |
+
+>Are the highest recorded temps for each state more recent or more historic?
+ The highest temps are usually more recent
 
