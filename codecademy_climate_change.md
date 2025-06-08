@@ -174,7 +174,7 @@ First 10 results:
 
 >  Most the biggest changes are in either the 2010s or the 1930s and  are in Minnesota, Wisconsin, Iowa, North and South Dakota, Idaho, and Montana
 
-#### *Is there a particular part of the United States that saw the largest yearly changes in temperature?
+#### * Is there a particular part of the United States that saw the largest yearly changes in temperature?
 
 > The biggest changes are mostly in the Midwest.
 
@@ -182,7 +182,7 @@ First 10 results:
 ## Ranking Functions
 
 
-### 6.Write a query to return a rank of the coldest temperatures on record (coldest_rank) along with year, state, and tempf or tempc.
+### 6. Write a query to return a rank of the coldest temperatures on record (coldest_rank) along with year, state, and tempf or tempc.
 
 ```SQL
 ELECT RANK()OVER (
@@ -212,4 +212,56 @@ First 10 Results:
 
 > The coldest years are historic.
 
-### 7.
+### 7. Modify your coldest_rank query to now instead return the warmest_rank for each state, meaning your query should return the warmest temp/year for each state.
+
+```SQL
+SELECT RANK()OVER (
+     PARTITION BY state -- sorts by state
+     ORDER BY tempf DESC -- ranks by warmest entry
+  ) as warmest_rank,
+  year,
+  state,
+  tempf
+FROM state_climate; 
+```
+
+First 10 Results:
+| warmest_rank | year | state   | tempf       |
+|--------------|------|---------|-------------|
+| 1            | 1921 | Alabama | 65.70833333 |
+| 2            | 1927 | Alabama | 65.58333333 |
+| 3            | 2019 | Alabama | 65.375      |
+| 4            | 2016 | Alabama | 65.34166667 |
+| 5            | 1911 | Alabama | 65.325      |
+| 6            | 1922 | Alabama | 65.16666667 |
+| 7            | 1998 | Alabama | 65.125      |
+| 8            | 1933 | Alabama | 65.1        |
+| 9            | 2017 | Alabama | 65.03333333 |
+| 10           | 1925 | Alabama | 64.95833333 |
+
+#### Again, are the warmest temperatures more recent or historic for each state?
+
+
+  I added the following line to the previous query to get a better view of the warmest years
+  
+ ``` SQL
+...
+ORDER BY warmest_rank; 
+```
+
+First 10 Results:
+| warmest_rank | year | state       | tempf       |
+|--------------|------|-------------|-------------|
+| 1            | 1921 | Alabama     | 65.70833333 |
+| 1            | 2017 | Arizona     | 63.03333333 |
+| 1            | 2012 | Arkansas    | 63.60833333 |
+| 1            | 2014 | California  | 61.45       |
+| 1            | 2012 | Colorado    | 48.31666667 |
+| 1            | 2012 | Connecticut | 52.46666667 |
+| 1            | 2012 | Delaware    | 58.475      |
+| 1            | 2015 | Florida     | 73.35833333 |
+| 1            | 2019 | Georgia     | 66.225      |
+| 1            | 1934 | Idaho       | 46.91666667 |
+
+> most of the warmest years are recent
+
