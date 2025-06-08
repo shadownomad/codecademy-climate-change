@@ -265,3 +265,67 @@ First 10 Results:
 
 > most of the warmest years are recent
 
+###  8.Let’s now write a query that will return the average yearly temperatures in quartiles instead of in rankings for each state. 
+
+Your query should return quartile, year, state and tempf or tempc. The top quartile should be the coldest years.
+
+```SQL
+SELECT NTILE(4) OVER(
+    PARTITION BY state
+    ORDER BY tempf
+) AS quartile, --returns quartile per state by lowest tempf
+  year,
+  state,
+  tempf
+FROM state_climate;
+```
+
+First 10 Result:
+| quartile | year | state   | tempf       |
+|----------|------|---------|-------------|
+| 1        | 1976 | Alabama | 60.675      |
+| 1        | 1968 | Alabama | 61.0        |
+| 1        | 1940 | Alabama | 61.175      |
+| 1        | 1983 | Alabama | 61.19166667 |
+| 1        | 1958 | Alabama | 61.21666667 |
+| 1        | 1979 | Alabama | 61.35833333 |
+| 1        | 1969 | Alabama | 61.36666667 |
+| 1        | 1901 | Alabama | 61.39166667 |
+| 1        | 1960 | Alabama | 61.54166667 |
+| 1        | 1895 | Alabama | 61.64166667 |
+
+
+#### Are the coldest years more recent or historic?
+
+> The majority of first quartile years are historic
+
+### 9. Lastly, we will write a query that will return the average yearly temperatures in quintiles (5).
+
+Your query should return quintile, year, state and tempf or tempc. The top quintile should be the coldest years overall, not by state.
+
+```SQL
+SELECT NTILE(5) OVER (
+  ORDER BY tempf
+) AS quintile, -- returns quintile by lowest tempf
+  year,
+  state,
+  tempf
+FROM state_climate;
+```
+
+First Ten Results:
+| quintile | year | state        | tempf       |
+|----------|------|--------------|-------------|
+| 1        | 1950 | North Dakota | 34.9        |
+| 1        | 1951 | North Dakota | 35.61666667 |
+| 1        | 1917 | Minnesota    | 35.675      |
+| 1        | 1916 | North Dakota | 35.73333333 |
+| 1        | 1917 | North Dakota | 35.91666667 |
+| 1        | 1899 | North Dakota | 36.25       |
+| 1        | 1896 | North Dakota | 36.425      |
+| 1        | 1950 | Minnesota    | 36.45833333 |
+| 1        | 1904 | Maine        | 36.51666667 |
+| 1        | 1996 | North Dakota | 36.51666667 |
+
+#### What is different about the coldest quintile now?
+> Most of the results in the top quintile are in Northern states.
