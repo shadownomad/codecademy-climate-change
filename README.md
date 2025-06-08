@@ -14,4 +14,4 @@ The goal of this project is to demonstrate proficieny in the following:
    2. The SQL queries climate_change.sql
    3. The analysis page climate_change.md
 
-The query results are about 6000 results per query and of less focus for this project. Therefore I will only include the first ten results each to show the query worked correctly
+The query results are about 6000 results per query. I will only include the first ten results each.
