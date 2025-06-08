@@ -1,5 +1,6 @@
 -- Understanding the data
 --1. 
+
 SELECT *
 FROM state_climate; --standard familiarization query
 
@@ -12,7 +13,7 @@ SELECT state,
           PARTITION BY state
           ORDER BY YEAR
        ) AS running_avg_temp --returns average tempf per state.
-FROM state_climate;
+FROM state_climate; 
 --3
 SELECT state,
        year,
@@ -33,6 +34,7 @@ SELECT state,
       UNBOUNDED FOLLOWING -- avoids returning just the entry of current column
        ) AS highest_temp -- returns highjest temp per state
 FROM state_climate;
+
 --5
 SELECT state,
       year,
@@ -42,8 +44,22 @@ SELECT state,
           ORDER BY year
       )AS change_in_temp --shows the difference in tempf per year by state
 FROM state_climate;
+
+--5.1
+SELECT state,
+      year,
+      tempf,
+      tempf - LAG(tempf, 1, tempf) OVER(
+          PARTITION BY state
+          ORDER BY year
+      )AS change_in_temp --shows the difference in tempf per year by state
+FROM state_climate
+ORDER BY change_in_temp; --added to see biggest changes
+
+
 -- Ranking Functions
 --6.
+
 SELECT RANK()OVER (
   ORDER BY tempf
   ) as coldest_rank, --ranks by the coldest entries
@@ -51,6 +67,8 @@ SELECT RANK()OVER (
   state,
   tempf
 FROM state_climate;
+
+
 --7
 SELECT RANK()OVER (
      PARTITION BY state -- sorts by state
@@ -60,6 +78,19 @@ SELECT RANK()OVER (
   state,
   tempf
 FROM state_climate; 
+
+--7.1
+SELECT RANK()OVER (
+     PARTITION BY state -- sorts by state
+     ORDER BY tempf DESC -- ranks by warmest entry
+  ) as warmest_rank,
+  year,
+  state,
+  tempf
+FROM state_climate
+ORDER BY warmest_rank
+LIMIT 10; 
+
 --8
 SELECT NTILE(4) OVER(
     PARTITION BY state
@@ -77,4 +108,5 @@ SELECT NTILE(5) OVER (
   year,
   state,
   tempf
-FROM state_climate;
+FROM state_climate
+LIMIT 10;
